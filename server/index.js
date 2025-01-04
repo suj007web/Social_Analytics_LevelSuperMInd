@@ -2,13 +2,20 @@ import express from 'express';
 import cors from 'cors';
 import axios from 'axios';
 import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import path, { dirname } from 'path';
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const staticDir = path.join(__dirname, '..', 'client', 'dist');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
+app.use(express.static(staticDir));
 
 const langflowBaseUrl = process.env.LANGFLOW_BASE_URL;
 const langflowEndpoint = process.env.LANGFLOW_ENDPOINT;
@@ -62,8 +69,8 @@ app.post('/api/analyze', async (req, res) => {
   }
 });
 
-app.get('/', (req, res) => {
-  res.send('Server is running');
+app.get('*', (req, res, next) => {
+  return res.sendFile(path.join(staticDir, 'index.html'))
 });
 
 app.listen(PORT, () => {

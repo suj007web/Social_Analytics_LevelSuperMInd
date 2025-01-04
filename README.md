@@ -1,7 +1,7 @@
 # Social Analytics Dashboard
 
 Live Link: [assignment.ishaanminocha.in](https://assignment.ishaanminocha.in)
-Demo Video: []()
+Demo Video: [bit.ly/levelsuperminddemovideo](https://bit.ly/levelsuperminddemovideo)
 
 ### Assignment Objective:
 
