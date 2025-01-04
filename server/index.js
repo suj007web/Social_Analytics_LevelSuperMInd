@@ -3,38 +3,33 @@ import cors from 'cors';
 import axios from 'axios';
 import dotenv from 'dotenv';
 
-dotenv.config({
-  path:"./.env"
-});
+dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
-console.log('PORT:', process.env.PORT);
-console.log('ASTRA_TOKEN:', process.env.ASTRA_TOKEN);
+const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-const LANGFLOW_BASE_URL = 'https://api.langflow.astra.datastax.com';
+const langflowBaseUrl = process.env.LANGFLOW_BASE_URL;
+const langflowEndpoint = process.env.LANGFLOW_ENDPOINT;
 
 app.post('/api/analyze', async (req, res) => {
-  console.log("hi")
-  const { message, platform, postType, targetAudience} = req.body;
+  const { message, platform, postType, targetAudience } = req.body;
   const token = process.env.ASTRA_TOKEN;
   try {
     const response = await axios.post(
-      `${LANGFLOW_BASE_URL}/lf/c3bd2701-3d93-473a-8e46-844b7dac03a2/api/v1/run/ddae7380-a6b7-48ed-beb8-fccc3bef1700`,
+      `${langflowBaseUrl}/${langflowEndpoint}`,
       {
         input_value: `
         You are a social media analyst. Analyze the given dataset of social media posts, which includes metrics such as engagement, likes, comments, shares, impressions, and platform type.
 
+        Based on this data, provide insights under the following headings with up to two points each, including percentages and comparisons to highlight better-performing elements ( (I have given what to include in each)):
 
-Based on this data, provide insights under the following headings with up to two points each, including percentages and comparisons to highlight better-performing elements ( (I have given what to include in each)):
+        1. Insightful Analysis (this should be based on Users input). inputs are : Target Audience: ${targetAudience} Post Type: ${postType} Platform: ${platform}
+        2. Recommended Actions (give some practical Steps Based on Insights for user to improve engagement).
 
-1. Insightful Analysis (this should be based on User’s input). inputs are : ${targetAudience} ${postType} ${platform}
-
-. Recommended Actions (give some practical Steps Based on Insights for user to improve engagement).
-Finally, answer the user's question in a concise, human-readable format within 50 words:
-      ${message}}
+        Finally, answer the user's question in a concise, human-readable format within 50 words:
+        Question: ${message}
         `,
         output_type: 'chat',
         tweaks: {
@@ -65,6 +60,10 @@ Finally, answer the user's question in a concise, human-readable format within 5
       details: error.response?.data || error.message,
     });
   }
+});
+
+app.get('/', (req, res) => {
+  res.send('Server is running');
 });
 
 app.listen(PORT, () => {

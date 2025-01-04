@@ -114,7 +114,7 @@ export default function AnalyticsForm() {
         <Sparkles className="w-6 h-6 text-purple-400" />
         <h1 className="text-2xl font-bold text-white">Social Media Analytics</h1>
       </motion.div>
-      <p>Download Dataset from here : </p>
+      <p className="text-gray-200 mb-4">Download Dataset from here: <a href="/CorrectedRealisticSocialMediaPerformanceAnalysis.csv" className="text-purple-400 hover:text-purple-300 underline">Social Media Analytics Dataset</a></p>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-200">
