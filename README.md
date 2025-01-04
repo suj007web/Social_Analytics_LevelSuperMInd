@@ -61,5 +61,6 @@ LANGFLOW_ENDPOINT=
 
 4. Start the development server from root directory:
    ```bash
-   npm run dev
+   npm run build
+   npm run start
    ```
