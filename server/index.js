@@ -11,11 +11,17 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const staticDir = path.join(__dirname, '..', 'client', 'dist');
 
+const backendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
+
 const app = express();
 const PORT = process.env.PORT || 5000;
-app.use(cors());
+app.use(cors({
+  origin: backendUrl,
+  credentials: true,
+  methods: ['GET', 'POST']
+}));
 app.use(express.json());
-app.use(express.static(staticDir));
+// app.use(express.static(staticDir));
 
 const langflowBaseUrl = process.env.LANGFLOW_BASE_URL;
 const langflowEndpoint = process.env.LANGFLOW_ENDPOINT;
@@ -69,9 +75,9 @@ app.post('/api/analyze', async (req, res) => {
   }
 });
 
-app.get('*', (req, res, next) => {
-  return res.sendFile(path.join(staticDir, 'index.html'))
-});
+// app.get('*', (req, res, next) => {
+//   return res.sendFile(path.join(staticDir, 'index.html'))
+// });
 
 app.listen(PORT, () => {
   console.log(`Middleware server running on port ${PORT}`);
